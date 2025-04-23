@@ -49,7 +49,7 @@
   main {
     flex-grow: 1;
     padding: 25px 20px 40px;
-    max-width: 900px;
+    max-width: 960px;
     margin: auto;
     width: 100%;
     box-sizing: border-box;
@@ -60,13 +60,34 @@
     font-size: 1.1rem;
     border-radius: 10px;
     border: none;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     box-sizing: border-box;
     outline-offset: 2px;
     transition: box-shadow 0.3s ease;
   }
   #searchBar:focus {
     box-shadow: 0 0 8px var(--accent-color);
+  }
+  #categoryFilter {
+    margin-bottom: 30px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    background: var(--card-bg);
+    color: var(--text-color);
+    outline-offset: 2px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 280px;
+  }
+  #categoryFilter:focus {
+    box-shadow: 0 0 8px var(--accent-color);
+  }
+  #gameCount {
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: var(--accent-color);
   }
   .game-list {
     display: grid;
@@ -140,6 +161,34 @@
     outline: none;
     box-shadow: 0 8px 18px rgba(63, 176, 255, 0.75);
   }
+  #backToTop {
+    position: fixed;
+    right: 24px;
+    bottom: 80px;
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 30px;
+    padding: 10px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+    z-index: 1100;
+    user-select: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #backToTop.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #backToTop:hover,
+  #backToTop:focus {
+    background: #3fb0ff;
+    outline: none;
+    box-shadow: 0 8px 18px rgba(63, 176, 255, 0.75);
+  }
 
   /* Dark mode styles */
   body.dark {
@@ -158,17 +207,24 @@
     background: var(--accent-color);
     color: var(--bg-color);
   }
+  body.dark #backToTop {
+    background: var(--accent-color);
+    color: var(--bg-color);
+  }
 
   /* Responsive tweaks */
   @media (max-width: 400px) {
     .game-card iframe {
       height: 280px;
     }
-    #darkToggle {
+    #darkToggle, #backToTop {
       padding: 10px 16px;
       font-size: 0.9rem;
       right: 16px;
       bottom: 16px;
+    }
+    #backToTop {
+      bottom: 56px;
     }
   }
 </style>
@@ -182,54 +238,31 @@
 
 <main>
   <input type="search" id="searchBar" placeholder="Search games..." aria-label="Search games" autocomplete="off" />
+  <select id="categoryFilter" aria-label="Filter games by category">
+    <option value="all">All Categories</option>
+    <option value="platformer">Platformer</option>
+    <option value="puzzle">Puzzle</option>
+    <option value="runner">Runner</option>
+    <option value="action">Action</option>
+  </select>
+  <div id="gameCount" aria-live="polite" aria-atomic="true"></div>
 
   <div class="game-list" id="gameList" role="list">
 
-    <article class="game-card" data-title="Fireboy and Watergirl" role="listitem" tabindex="0">
+    <article class="game-card" data-title="Fireboy and Watergirl" data-category="puzzle" role="listitem" tabindex="0">
       <div class="game-title">Fireboy and Watergirl</div>
       <iframe src="https://www.crazygames.com/embed/fireboy-and-watergirl-1-in-the-forest" allowfullscreen title="Play Fireboy and Watergirl game"></iframe>
     </article>
 
-    <article class="game-card" data-title="Run 3" role="listitem" tabindex="0">
+    <article class="game-card" data-title="Run 3" data-category="runner" role="listitem" tabindex="0">
       <div class="game-title">Run 3</div>
       <iframe src="https://www.crazygames.com/embed/run-3" allowfullscreen title="Play Run 3 game"></iframe>
     </article>
 
-    <article class="game-card" data-title="Slope" role="listitem" tabindex="0">
+    <article class="game-card" data-title="Slope" data-category="runner" role="listitem" tabindex="0">
       <div class="game-title">Slope</div>
       <iframe src="https://www.crazygames.com/embed/slope" allowfullscreen title="Play Slope game"></iframe>
     </article>
 
-  </div>
-</main>
-
-<footer>
-  Made with ❤️ by Brekko.  
-  <br />Games embedded from <a href="https://www.crazygames.com" target="_blank" rel="noopener noreferrer">CrazyGames</a>.
-</footer>
-
-<button id="darkToggle" aria-pressed="false" aria-label="Toggle dark mode">Toggle Dark Mode</button>
-
-<script>
-  // Dark mode toggle
-  const toggleBtn = document.getElementById('darkToggle');
-  toggleBtn.addEventListener('click', () => {
-    const isDark = document.body.classList.toggle('dark');
-    toggleBtn.setAttribute('aria-pressed', isDark);
-  });
-
-  // Search functionality
-  const searchInput = document.getElementById('searchBar');
-  const games = document.querySelectorAll('.game-card');
-
-  searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim().toLowerCase();
-    games.forEach(game => {
-      const title = game.getAttribute('data-title').toLowerCase();
-      game.style.display = title.includes(query) ? '' : 'none';
-    });
-  });
-</script>
-
-</body>
-</html>
+    <article class="game-card" data-title="Gravity Run" data-category="runner" role="listitem" tabindex="0">
+      <div class="game
